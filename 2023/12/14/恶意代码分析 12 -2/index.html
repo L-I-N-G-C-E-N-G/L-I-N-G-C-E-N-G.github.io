@@ -1,0 +1,158 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>恶意代码分析12-2 | L1Nk8ug's Blog</title><meta name="author" content="L-I-N-G-C-E-N-G"><meta name="copyright" content="L-I-N-G-C-E-N-G"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="前置先收集一下PE看看 字符串也收集一下有多余的资源节 导出 加载指定的模块 先分析上面sub_40149D函数sub_40149D下的属性调用svchost.exe 跟进下函数GetSystemDirectoryA 开始检索svchost.exe 文件关键代码 sub_40132C 函数进行加载指定模块操作获取指定资源文件 findresourceA 下的name属性 LOCALIZATION">
+<meta property="og:type" content="article">
+<meta property="og:title" content="恶意代码分析12-2">
+<meta property="og:url" content="https://l-i-n-g-c-e-n-g.github.io/2023/12/14/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%2012%20-2/index.html">
+<meta property="og:site_name" content="L1Nk8ug&#39;s Blog">
+<meta property="og:description" content="前置先收集一下PE看看 字符串也收集一下有多余的资源节 导出 加载指定的模块 先分析上面sub_40149D函数sub_40149D下的属性调用svchost.exe 跟进下函数GetSystemDirectoryA 开始检索svchost.exe 文件关键代码 sub_40132C 函数进行加载指定模块操作获取指定资源文件 findresourceA 下的name属性 LOCALIZATION">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/L-I-N-G-C-E-N-G/IMG_SSSS@1.0/220011-1623938411a765.jpg">
+<meta property="article:published_time" content="2023-12-14T01:56:42.841Z">
+<meta property="article:modified_time" content="2023-12-14T02:13:30.968Z">
+<meta property="article:author" content="L-I-N-G-C-E-N-G">
+<meta property="article:tag" content="恶意代码分析">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/L-I-N-G-C-E-N-G/IMG_SSSS@1.0/220011-1623938411a765.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://l-i-n-g-c-e-n-g.github.io/2023/12/14/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%2012%20-2/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '恶意代码分析12-2',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-12-14 10:13:30'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><link rel="stylesheet" href="E:\MyWeb\source\css\transpancy.css"><meta name="generator" content="Hexo 7.0.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://s2.loli.net/2023/11/29/XZwOGSrh8MabBTQ.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">11</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> home</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-bookmark"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> tools</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/tool/"><i class="fa-fw fa fa-tags"></i><span> tool</span></a></li><li><a class="site-page child" href="/galgame/"><i class="fa-fw fa fa-archive"></i><span> galgame</span></a></li><li><a class="site-page child" href="/gallery/"><i class="fa-fw fa fa-images"></i><span> gallery</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/Friend/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/gh/L-I-N-G-C-E-N-G/IMG_SSSS@1.0/220011-1623938411a765.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="L1Nk8ug's Blog"><span class="site-name">L1Nk8ug's Blog</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> home</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-bookmark"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> tools</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/tool/"><i class="fa-fw fa fa-tags"></i><span> tool</span></a></li><li><a class="site-page child" href="/galgame/"><i class="fa-fw fa fa-archive"></i><span> galgame</span></a></li><li><a class="site-page child" href="/gallery/"><i class="fa-fw fa fa-images"></i><span> gallery</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/Friend/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">恶意代码分析12-2</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-12-14T01:56:42.841Z" title="发表于 2023-12-14 09:56:42">2023-12-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-12-14T02:13:30.968Z" title="更新于 2023-12-14 10:13:30">2023-12-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/">恶意代码分析</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="恶意代码分析12-2"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h4 id="前置"><a href="#前置" class="headerlink" title="前置"></a>前置</h4><p>先收集一下PE看看 字符串也收集一下<br>有多余的资源节 导出<br><img src="https://s2.loli.net/2023/12/14/JQZLjzC7IeBvcFg.png" alt="image.png"></p>
+<p>加载指定的模块 先分析上面sub_40149D函数<br><img src="https://s2.loli.net/2023/12/14/ght7GvAO58bNd3E.png" alt="image.png"><br>sub_40149D下的属性调用svchost.exe 跟进下函数GetSystemDirectoryA 开始检索svchost.exe 文件<br><img src="https://s2.loli.net/2023/12/14/2pa9hmMSJYfgUiI.png" alt="image.png"><br><img src="https://s2.loli.net/2023/12/14/5AkNr6LJuqw3Hbv.png" alt="image.png"><br>关键代码 sub_40132C 函数进行加载指定模块操作<br>获取指定资源文件 findresourceA 下的name属性 LOCALIZATION  Type属性 UNICODE类型 并且为其开辟内存大小范围，在对其资源进行加密 sub_401000函数 并且保存到物理目录下，然后释放内存<br><img src="https://s2.loli.net/2023/12/14/gZxQOmYfIvXtW1z.png" alt="image.png"><br><img src="https://s2.loli.net/2023/12/14/2OpbwSAUd78ahED.png" alt="image.png"><br>继续向下分析main 下判断的函数 sub_4010EA<br>也可以看的出 前段0x5A4D 0x4550 验证PE文件的头 在检索svchost 。利用函数CreateProcessA挂起方式创建svchost<br>ReadProcessMemory 对 svchost 进行ebx +8 StackLimit<br>GetProcAddress的 通过procname属性 “NtUnmapViewOfSection”卸载原本 stack<br><img src="https://s2.loli.net/2023/12/14/4gj98eDryXn7QTf.png" alt="image.png"><br>WriteProcessMemory 向下设置 context  eax 在去利用 ResumeThread 恢复进程<br><img src="https://s2.loli.net/2023/12/14/foWjhSCzdb76si1.png" alt="image.png"><br>分析 LOCALIZATION  的文件<br>xor 41 也就是 A 解密为源文件<br><img src="https://s2.loli.net/2023/12/14/CyYeWakTOJUKN5H.png" alt="image.png"><br>IDA分析对其窗口隐藏激活 重点函数 SetWindowsHookExA 键盘记录 第一标记符 是13 记录键盘 跟进FN 下的sub_4010C7函数<br><img src="https://s2.loli.net/2023/12/14/zdZGBTs4oatNOQP.png" alt="image.png"><br>记录键盘基本信息 保存到fileName 属性下的”practicalmalwareanalysis.log”<br><img src="https://s2.loli.net/2023/12/14/wCaspTG41K3xVze.png" alt="image.png"><br>ZwUnmapViewOfSection释放内存写映射 -&gt;挂起在循环 VirtualAlloc 写进内存-&gt;  ResumeThread恢复执行进程</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://l-i-n-g-c-e-n-g.github.io">L-I-N-G-C-E-N-G</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://l-i-n-g-c-e-n-g.github.io/2023/12/14/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%2012%20-2/">https://l-i-n-g-c-e-n-g.github.io/2023/12/14/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%2012%20-2/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://l-i-n-g-c-e-n-g.github.io" target="_blank">L1Nk8ug's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/">恶意代码分析</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/L-I-N-G-C-E-N-G/IMG_SSSS@1.0/220011-1623938411a765.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2023/12/05/hook_TLs%20(buuctf%20k00h_slT)/" title="hook_TLs (buuctf k00h_slT)"><img class="cover" src="https://cdn.jsdelivr.net/gh/L-I-N-G-C-E-N-G/IMG_SSSS@1.0/234913-16238585532b11.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">hook_TLs (buuctf k00h_slT)</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/11/29/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%2011%20-3/" title="恶意代码分析11-3"><img class="cover" src="https://cdn.jsdelivr.net/gh/L-I-N-G-C-E-N-G/IMG_SSSS@1.0/000005-1611158405c3d5.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-11-29</div><div class="title">恶意代码分析11-3</div></div></a></div><div><a href="/2023/12/01/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%2011%20-1/" title="恶意代码分析11-1"><img class="cover" src="https://cdn.jsdelivr.net/gh/L-I-N-G-C-E-N-G/IMG_SSSS@1.0/230242-16002685626a1d.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-12-01</div><div class="title">恶意代码分析11-1</div></div></a></div><div><a href="/2023/12/01/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%2011%20-2/" title="恶意代码分析11-2"><img class="cover" src="https://cdn.jsdelivr.net/gh/L-I-N-G-C-E-N-G/IMG_SSSS@1.0/205419-1613480059a058.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-12-01</div><div class="title">恶意代码分析11-2</div></div></a></div><div><a href="/2023/12/02/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%2012%20-1/" title="恶意代码分析12-1"><img class="cover" src="https://cdn.jsdelivr.net/gh/L-I-N-G-C-E-N-G/IMG_SSSS@1.0/234718-15895576386a47.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-12-02</div><div class="title">恶意代码分析12-1</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://s2.loli.net/2023/11/29/XZwOGSrh8MabBTQ.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">L-I-N-G-C-E-N-G</div><div class="author-info__description">举旗高歌勇猛进，逆天逆命逆乾坤!</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">11</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/L-I-N-G-C-E-N-G"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/L-I-N-G-C-E-N-G" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:lypu8pj.qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%89%8D%E7%BD%AE"><span class="toc-number">1.</span> <span class="toc-text">前置</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/12/14/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%2012%20-2/" title="恶意代码分析12-2"><img src="https://cdn.jsdelivr.net/gh/L-I-N-G-C-E-N-G/IMG_SSSS@1.0/220011-1623938411a765.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="恶意代码分析12-2"/></a><div class="content"><a class="title" href="/2023/12/14/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%2012%20-2/" title="恶意代码分析12-2">恶意代码分析12-2</a><time datetime="2023-12-14T01:56:42.841Z" title="发表于 2023-12-14 09:56:42">2023-12-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/12/05/hook_TLs%20(buuctf%20k00h_slT)/" title="hook_TLs (buuctf k00h_slT)"><img src="https://cdn.jsdelivr.net/gh/L-I-N-G-C-E-N-G/IMG_SSSS@1.0/234913-16238585532b11.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="hook_TLs (buuctf k00h_slT)"/></a><div class="content"><a class="title" href="/2023/12/05/hook_TLs%20(buuctf%20k00h_slT)/" title="hook_TLs (buuctf k00h_slT)">hook_TLs (buuctf k00h_slT)</a><time datetime="2023-12-05T08:08:48.030Z" title="发表于 2023-12-05 16:08:48">2023-12-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/12/03/DASCTF%202023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B%EF%BD%9C%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9/" title="DASCTF 2023六月挑战赛｜二进制专项 WP"><img src="https://cdn.jsdelivr.net/gh/L-I-N-G-C-E-N-G/IMG_SSSS@1.0/223621-1566570981fc22.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="DASCTF 2023六月挑战赛｜二进制专项 WP"/></a><div class="content"><a class="title" href="/2023/12/03/DASCTF%202023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B%EF%BD%9C%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9/" title="DASCTF 2023六月挑战赛｜二进制专项 WP">DASCTF 2023六月挑战赛｜二进制专项 WP</a><time datetime="2023-12-03T11:29:39.284Z" title="发表于 2023-12-03 19:29:39">2023-12-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/12/02/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%2012%20-1/" title="恶意代码分析12-1"><img src="https://cdn.jsdelivr.net/gh/L-I-N-G-C-E-N-G/IMG_SSSS@1.0/234718-15895576386a47.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="恶意代码分析12-1"/></a><div class="content"><a class="title" href="/2023/12/02/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%2012%20-1/" title="恶意代码分析12-1">恶意代码分析12-1</a><time datetime="2023-12-02T11:06:33.758Z" title="发表于 2023-12-02 19:06:33">2023-12-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/12/01/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%2011%20-2/" title="恶意代码分析11-2"><img src="https://cdn.jsdelivr.net/gh/L-I-N-G-C-E-N-G/IMG_SSSS@1.0/205419-1613480059a058.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="恶意代码分析11-2"/></a><div class="content"><a class="title" href="/2023/12/01/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%2011%20-2/" title="恶意代码分析11-2">恶意代码分析11-2</a><time datetime="2023-12-01T07:15:38.965Z" title="发表于 2023-12-01 15:15:38">2023-12-01</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent"><div id="footer-wrap"><div class="copyright">&copy;2023  BY L-I-N-G-C-E-N-G - 2023 By L-I-N-G-C-E-N-G</div><div class="footer_custom_text"><meta name="msvalidate.01" content="3E8202CC197C12846FFB8AE868C09F2D" /></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="true"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>
