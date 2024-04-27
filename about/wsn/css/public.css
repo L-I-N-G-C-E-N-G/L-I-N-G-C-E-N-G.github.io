@@ -1,0 +1,221 @@
+@charset "UTF-8";
+@font-face {
+  font-family: "钉钉进步体";
+  font-weight: 400;
+  src: url("../font/font.woff2") format("woff2"), url("//font/font.woff") format("woff");
+  font-display: swap;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: '钉钉进步体';
+  color: #333;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  scroll-behavior: smooth;
+}
+
+div[class$="center"] {
+  width: 1700px;
+  margin: 0 auto;
+}
+
+nav {
+  position: fixed;
+  top: 0;
+  display: none;
+  width: 100%;
+  margin: 0 auto;
+  height: 90px;
+  background-color: #eee;
+  z-index: 100;
+}
+
+nav .nav_center {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+nav .nav_center > div {
+  height: 90px;
+}
+
+nav .nav_center .left {
+  display: flex;
+  align-items: center;
+}
+
+nav .nav_center .left h2 {
+  display: flex;
+  align-items: center;
+}
+
+nav .nav_center .left h2 a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+nav .nav_center .left h2 a span {
+  margin-left: 10px;
+  font-size: 26px;
+  color: #328ac3;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+nav .nav_center .left h2 a img {
+  height: 70px;
+}
+
+main {
+  width: 1920px;
+  margin: 10px auto;
+}
+
+main section {
+  width: 100%;
+  margin: 50px auto;
+}
+
+main section .section_center {
+  margin: 0 auto;
+  padding: 0 20px;
+  padding: 40px 0 30px;
+}
+
+main section .section_center .title_top {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+main section .section_center .title_top .title {
+  display: flex;
+  align-items: end;
+  position: relative;
+  padding-left: 50px;
+  margin-bottom: 60px;
+}
+
+main section .section_center .title_top .title h2 {
+  position: relative;
+  font-size: 40px;
+}
+
+main section .section_center .title_top .title h2::before {
+  position: absolute;
+  bottom: -20px;
+  left: -40px;
+  width: 40px;
+  aspect-ratio: 1/1;
+  background-color: #4298d2;
+  border-radius: 50%;
+  content: '';
+  z-index: 1;
+}
+
+main section .section_center .title_top .title h2::after {
+  position: absolute;
+  bottom: -35px;
+  left: 0px;
+  width: 20px;
+  aspect-ratio: 1/1;
+  background-color: #005bac;
+  border-radius: 50%;
+  content: '';
+  z-index: 1;
+}
+
+main section .section_center .title_top .title span {
+  margin-left: 10px;
+  margin-bottom: 5px;
+}
+
+main section .section_center .title_top .title::before {
+  position: absolute;
+  bottom: -10px;
+  left: 45px;
+  width: 500px;
+  height: 5px;
+  background-color: #127bc0;
+  content: '';
+}
+
+main section .section_center .title_top .title::after {
+  position: absolute;
+  bottom: 15px;
+  left: 0;
+  width: 60px;
+  height: 5px;
+  background-color: #127bc0;
+  transform: rotate(60deg);
+  content: '';
+}
+
+main section .section_center .title_top .more {
+  transition: background-color,transform 0.5s;
+  position: relative;
+  height: 70px;
+  background-color: #127bc0;
+  border-radius: 10px;
+  font-size: 20px;
+  padding: 0 30px;
+  cursor: pointer;
+}
+
+main section .section_center .title_top .more a {
+  display: block;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  line-height: 70px;
+  color: white;
+  text-decoration: none;
+}
+
+main section .section_center .title_top .more::before {
+  position: absolute;
+  left: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 90%;
+  background-color: #127bc0;
+  content: '';
+}
+
+main section .section_center .title_top .more::after {
+  position: absolute;
+  right: -10px;
+  top: -10px;
+  width: 30px;
+  aspect-ratio: 1/1;
+  border: 3px dotted #127bc0;
+  border-radius: 50%;
+  content: '';
+}
+
+main section .section_center .title_top .more:hover {
+  background-color: #4298d2;
+  transform: scale(0.95);
+}
+
+main section .section_center .title_top .more:hover::before {
+  background-color: #4298d2;
+}
+
+main section .section_center .title_top .more:hover::after {
+  border: 3px dotted #4298d2;
+}
+
+main section .section_center .content {
+  width: 100%;
+  margin: auto;
+}

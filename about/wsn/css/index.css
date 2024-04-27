@@ -1,0 +1,381 @@
+header {
+  width: 1920px;
+  margin: 0 auto;
+}
+
+header > .top {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+}
+
+header > .top .bg_left {
+  position: absolute;
+  top: 50%;
+  width: 40%;
+  height: 100%;
+  transform: translateY(-50%);
+  background-color: #1a7ac0;
+}
+
+header > .top .bg_right {
+  position: absolute;
+  right: 0;
+  width: 40%;
+  height: 110px;
+  background-color: #1a7ac0;
+}
+
+header > .top .top_center {
+  display: flex;
+}
+
+header > .top .top_center .contact {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 680px;
+  height: 220px;
+  padding: 20px 40px;
+  background-color: #1a7ac0;
+  z-index: 1;
+}
+
+header > .top .top_center .contact .triangle_top {
+  position: absolute;
+  top: 50%;
+  right: -100px;
+  transform: translateY(-50%);
+  border-bottom: 220px solid transparent;
+  border-left: 100px solid #1a7ac0;
+}
+
+header > .top .top_center .contact p {
+  color: white;
+}
+
+header > .top .top_center .contact > .left {
+  width: 35%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+header > .top .top_center .contact > .left img {
+  height: 140px;
+  margin-bottom: 10px;
+}
+
+header > .top .top_center .contact .right {
+  margin-left: 20px;
+}
+
+header > .top .top_center .contact .right .num {
+  position: relative;
+  color: white;
+  font-size: 34px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+header > .top .top_center .contact .right .num::before {
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: calc(100% + 30px);
+  height: 2px;
+  background-color: white;
+  content: '';
+}
+
+header > .top .top_center .contact .right a {
+  transition: all 0.3s;
+  color: white;
+}
+
+header > .top .top_center .contact .right a:hover {
+  color: #c1dcee;
+}
+
+header > .top .top_center .contact .right p {
+  margin: 10px 0;
+  font-size: 18px;
+}
+
+header > .top .top_center .logo {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 1020px;
+  height: 110px;
+  background-color: white;
+  padding-left: 150px;
+  border-bottom: 5px solid #1a7ac0;
+}
+
+header > .top .top_center .logo h1 {
+  display: flex;
+  align-items: center;
+}
+
+header > .top .top_center .logo h1 a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+header > .top .top_center .logo h1 a span {
+  margin-left: 10px;
+  font-size: 26px;
+  color: #328ac3;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+header > .top .top_center .logo h1 a img {
+  height: 80px;
+}
+
+header > .top .top_center .logo .design_logo {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 80px;
+  height: 100%;
+  background-color: #127bc0;
+}
+
+header > .top .top_center .logo .design_logo::before {
+  position: absolute;
+  left: -20px;
+  top: 0;
+  width: 10px;
+  height: 100%;
+  background-color: #127bc0;
+  content: '';
+}
+
+header .banner {
+  width: 100%;
+  height: 750px;
+  margin: 0 auto;
+  margin-top: -100px;
+}
+
+header .banner .banner_center {
+  position: relative;
+}
+
+header .banner .banner_center .black_cover {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+header .banner .banner_center .right_triangle {
+  position: absolute;
+  right: 0;
+  top: 0;
+  border-top: 745px solid transparent;
+  border-right: 830px solid #dfdfdf;
+  z-index: 1;
+}
+
+header .banner .banner_center .right_triangle h2 {
+  position: absolute;
+  width: 400px;
+  top: -420px;
+  left: 470px;
+  z-index: 1;
+  font-size: 60px;
+  color: #ad1a1f;
+}
+
+header .banner .banner_center .right_triangle ul {
+  position: absolute;
+  width: 400px;
+  top: -230px;
+  left: 400px;
+  z-index: 1;
+}
+
+header .banner .banner_center .right_triangle ul li {
+  position: relative;
+  margin: 15px 0;
+  font-size: 28px;
+}
+
+header .banner .banner_center img {
+  user-select: none;
+  width: 1690px;
+  height: 650px;
+}
+
+header .banner .banner_center > h2 {
+  position: absolute;
+  bottom: 50px;
+  left: 100px;
+  font-size: 100px;
+  color: white;
+  transform: scaleX(1.2);
+  text-shadow: 10px 10px 0px black;
+}
+
+header .banner .banner_under {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  bottom: -90px;
+  left: 0;
+  width: 900px;
+  height: 90px;
+  padding-left: 50px;
+  background: linear-gradient(90deg, #4191c0, #338ac0, #2582c0, #1a7ac0);
+}
+
+header .banner .banner_under p {
+  font-size: 40px;
+  color: white;
+}
+
+header .banner .banner_under .triangle_top {
+  position: absolute;
+  top: 50%;
+  right: -100px;
+  transform: translateY(-50%);
+  border-bottom: 90px solid transparent;
+  border-left: 100px solid #1a7ac0;
+}
+
+header .banner .banner_under::before {
+  position: absolute;
+  top: -15px;
+  right: -50px;
+  width: 100%;
+  height: 5px;
+  background-color: white;
+  content: '';
+}
+
+.info .section_center {
+  padding: 0;
+}
+
+.info .content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.info .content > div h3 {
+  margin-bottom: 15px;
+  font-size: 24px;
+  color: #222;
+}
+
+.info .content > div p {
+  text-indent: 2em;
+  font-size: 18px;
+}
+
+.info .content > div b {
+  font-weight: normal;
+  color: #ad1a1f;
+  background: linear-gradient(90deg, #5c0000, #721810, #892c1b, #a03f27, #b85333, #cf673f, #e77b4c, #ff9059) no-repeat right bottom;
+  background-size: 0% 2px;
+  transition: background-size 0.8s ease-in-out;
+}
+
+.info .content > div b:hover {
+  background-position-x: left;
+  background-size: 100% 2px;
+}
+
+.info .content .left {
+  width: 49%;
+  background-color: #f5f5f5;
+  padding: 48px;
+  border-radius: 10px;
+  border: 2px solid #eee;
+}
+
+.info .content .right {
+  display: flex;
+  flex-wrap: wrap;
+  width: 49%;
+  gap: 20px;
+}
+
+.info .content .right > div {
+  width: 100%;
+  padding: 50px;
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  border: 2px solid #eee;
+}
+
+.collection {
+  background-color: #f5f5f5;
+}
+
+.collection .content {
+  position: relative;
+  overflow-x: scroll;
+}
+
+.collection .content::-webkit-scrollbar {
+  height: 10px;
+}
+
+.collection .content::-webkit-scrollbar-track {
+  background-color: #ddd;
+}
+
+.collection .content::-webkit-scrollbar-thumb {
+  background-color: #888;
+}
+
+.collection .content > div {
+  display: flex;
+  width: 3870px;
+  height: 250px;
+  background-color: white;
+  padding: 20px;
+}
+
+.collection .content > div > img {
+  transition: transform 0.5s;
+  height: 100%;
+  margin: 0 20px;
+  border: 8px solid #eae71a;
+  border-left: 6px solid #e4d54f;
+  border-right: 6px solid #e4d54f;
+}
+
+.collection .content > div > img:hover {
+  transform: scale(1.05);
+}
+
+aside {
+  position: fixed;
+  bottom: 47px;
+  left: 10px;
+  width: 78px;
+  height: 242px;
+  background-color: #1a7ac0;
+  z-index: 10;
+}
+
+aside > a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  width: 100%;
+  height: 33.33%;
+  border: 1px solid white;
+  color: white;
+}
